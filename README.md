@@ -54,7 +54,7 @@ A production-grade backend service for scraping, storing, and serving car listin
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
+git clone <https://github.com/SahilSuman1011/Car-Listing-Service>
 cd car-listing-service
 ```
 
