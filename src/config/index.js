@@ -12,6 +12,7 @@ const config = {
   db: {
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT, 10) || 5432,
+    name: process.env.DB_NAME || 'app_db',
     name: process.env.DB_NAME || 'car_listings_db',
     user: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD,
