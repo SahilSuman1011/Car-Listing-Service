@@ -410,8 +410,7 @@ car-listing-service/
 ├── docker-compose.yml   # Docker orchestration
 ├── Dockerfile           # Container definition
 ├── package.json
-├── README.md
-└── DOCUMENTATION.md     # Detailed documentation
+└── README.md     
 ```
 
 ## 🧪 Testing
