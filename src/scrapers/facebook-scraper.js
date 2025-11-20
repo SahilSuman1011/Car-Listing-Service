@@ -28,7 +28,7 @@ class FacebookScraper {
       logger.info('Initializing browser...');
       
       this.browser = await puppeteer.launch({
-        headless: config.scraper.headless,
+        headless: false,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -76,8 +76,9 @@ class FacebookScraper {
         timeout: config.scraper.timeout,
       });
 
-      // Wait for content to load
-      await this.page.waitForTimeout(5000);
+      // Wait for content to load (Puppeteer v24+ removed page.waitForTimeout)
+      await this.page.waitForSelector('body', { timeout: 10000 }).catch(() => {});
+      await new Promise(res => setTimeout(res, 5000));
 
       // Try to scroll to load more items (lazy loading)
       await this.autoScroll();
@@ -86,42 +87,62 @@ class FacebookScraper {
       const scrapedData = await this.page.evaluate((maxListings) => {
         const results = [];
         
-        // Facebook Marketplace uses dynamic class names, so we need to be flexible
-        // This is a simplified version - actual selectors may need adjustment
+        // Target actual marketplace item links
+        const listingLinks = document.querySelectorAll('a[href*="/marketplace/item/"]');
         
-        // Try multiple possible selectors for listing containers
-        const possibleSelectors = [
-          '[data-pagelet*="Marketplace"]',
-          'div[role="main"] > div > div > div',
-          'a[href*="/marketplace/item/"]',
-        ];
-
-        let listingElements = [];
-        for (const selector of possibleSelectors) {
-          listingElements = document.querySelectorAll(selector);
-          if (listingElements.length > 0) break;
-        }
-
-        // Extract data from each listing (simplified - needs actual FB structure)
-        Array.from(listingElements).slice(0, maxListings).forEach((element) => {
+        // Use a Set to track unique listing IDs
+        const seenIds = new Set();
+        
+        Array.from(listingLinks).forEach((linkElement) => {
           try {
-            // This is a placeholder structure
-            // Real implementation needs to match actual Facebook DOM structure
-            const titleElement = element.querySelector('span[dir="auto"]');
-            const priceElement = element.querySelector('span[dir="auto"]');
-            const linkElement = element.closest('a') || element.querySelector('a');
+            // Extract listing ID from URL to avoid duplicates
+            const urlMatch = linkElement.href.match(/\/item\/(\d+)/);
+            if (!urlMatch) return;
             
-            if (titleElement && priceElement && linkElement) {
-              const listing = {
-                title: titleElement.textContent.trim(),
-                price_raw: priceElement.textContent.trim(),
+            const listingId = urlMatch[1];
+            if (seenIds.has(listingId)) return; // Skip duplicates
+            seenIds.add(listingId);
+            
+            if (results.length >= maxListings) return;
+            
+            // Find the parent container that holds all listing info
+            let container = linkElement;
+            for (let i = 0; i < 5; i++) {
+              container = container.parentElement;
+              if (!container) break;
+            }
+            
+            if (!container) return;
+            
+            // Extract all span elements with text content
+            const spans = Array.from(container.querySelectorAll('span'));
+            const textContent = spans.map(s => s.textContent.trim()).filter(t => t.length > 0);
+            
+            // Look for price (starts with PHP, ₱, or currency code)
+            const priceText = textContent.find(t => 
+              /^(PHP|₱|\$|€|£)\s*[\d,]+/.test(t) || /^[\d,]+\s*(PHP|₱)/.test(t)
+            );
+            
+            // Look for title (usually longer text, not a price)
+            const titleText = textContent.find(t => 
+              t.length > 10 && 
+              !t.includes('›') && 
+              !/^(PHP|₱|\$|€|£)/.test(t) &&
+              t !== priceText
+            );
+            
+            // Extract image if available
+            const imgElement = container.querySelector('img');
+            const imageUrl = imgElement ? (imgElement.src || imgElement.getAttribute('data-src')) : null;
+            
+            if (priceText && titleText && linkElement.href) {
+              results.push({
+                title: titleText,
+                price_raw: priceText,
                 url: linkElement.href,
-              };
-
-              // Only add if we have minimum required data
-              if (listing.title && listing.price_raw && listing.url) {
-                results.push(listing);
-              }
+                image_url: imageUrl,
+                listing_id: listingId,
+              });
             }
           } catch (err) {
             console.log('Error parsing listing element:', err);
@@ -174,7 +195,7 @@ class FacebookScraper {
       });
     });
 
-    await this.page.waitForTimeout(2000);
+    await new Promise(res => setTimeout(res, 2000));
   }
 
   /**

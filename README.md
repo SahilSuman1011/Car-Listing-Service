@@ -23,7 +23,6 @@ A production-grade backend service for scraping, storing, and serving car listin
 - **Data Persistence**: PostgreSQL database with proper schema design and indexing
 - **RESTful API**: Clean API endpoints for CRUD operations
 - **Duplicate Prevention**: Intelligent upsert mechanism to prevent duplicate entries
-- **Pagination & Filtering**: Advanced query options for listing retrieval
 - **Error Handling**: Comprehensive error handling and logging
 - **Validation**: Input validation using express-validator
 - **Security**: Helmet.js for security headers, CORS support
