@@ -2,6 +2,11 @@
 
 A production-grade backend service for scraping, storing, and serving car listings from Facebook Marketplace. Built with Node.js, Express, PostgreSQL, and Puppeteer.
 
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-blue.svg)](https://www.postgresql.org/)
+[![Express](https://img.shields.io/badge/Express-4.18+-lightgrey.svg)](https://expressjs.com/)
+[![Puppeteer](https://img.shields.io/badge/Puppeteer-21+-orange.svg)](https://pptr.dev/)
+
 ## 📋 Table of Contents
 
 - [Features](#features)
