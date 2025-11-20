@@ -28,7 +28,7 @@ class FacebookScraper {
       logger.info('Initializing browser...');
       
       this.browser = await puppeteer.launch({
-        headless: false,
+        headless: config.scraper.headless,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
