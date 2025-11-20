@@ -24,7 +24,6 @@ A production-grade backend service for scraping, storing, and serving car listin
 - **Data Persistence**: PostgreSQL database with proper schema design and indexing
 - **RESTful API**: Clean API endpoints for CRUD operations
 - **Duplicate Prevention**: Intelligent upsert mechanism using unique source URLs
-- **Pagination & Filtering**: Advanced query options for listing retrieval
 - **Error Handling**: Comprehensive error handling with retry logic
 - **Validation**: Input validation using express-validator
 - **Security**: Helmet.js for security headers, parameterized queries for SQL injection prevention
@@ -40,7 +39,6 @@ A production-grade backend service for scraping, storing, and serving car listin
 - **Validation**: express-validator
 - **Logging**: Winston
 - **Security**: Helmet.js
-- **Containerization**: Docker & Docker Compose
 
 ## 📦 Prerequisites
 
@@ -55,7 +53,7 @@ A production-grade backend service for scraping, storing, and serving car listin
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
+git clone <https://github.com/SahilSuman1011/Car-Listing-Service>
 cd car-listing-service
 ```
 
@@ -72,7 +70,6 @@ createdb car_listings_db
 # Or using psql
 psql -U postgres
 CREATE DATABASE car_listings_db;
-\q
 ```
 
 4. **Configure environment variables**
@@ -90,7 +87,7 @@ npm run migrate
 
 1. **Clone the repository**
 ```bash
-git clone <repository-url>
+git clone <https://github.com/SahilSuman1011/Car-Listing-Service>
 cd car-listing-service
 ```
 
@@ -123,7 +120,6 @@ DB_PORT=5432
 DB_NAME=car_listings_db
 DB_USER=postgres
 DB_PASSWORD=yourpassword
-DB_MAX_CONNECTIONS=20
 
 # Scraper Configuration
 SCRAPE_URL=https://www.facebook.com/marketplace/manila/cars?minPrice=350000&exact=false
@@ -431,11 +427,8 @@ car-listing-service/
 ├── logs/                # Application logs
 ├── .env.example         # Environment variables template
 ├── .gitignore
-├── docker-compose.yml   # Docker orchestration
-├── Dockerfile           # Container definition
 ├── package.json
-├── README.md
-└── DOCUMENTATION.md     # Detailed documentation
+└── README.md     
 ```
 
 ## 🧪 Testing
@@ -453,7 +446,7 @@ npm run lint
 
 ## 🚢 Deployment
 
-### Docker Deployment
+### Docker Deployment (optional)
 
 1. **Build and run with Docker Compose:**
 ```bash
@@ -490,26 +483,6 @@ npm run migrate
 4. **Start application:**
 ```bash
 npm start
-```
-
-### Using PM2 (Recommended for Production)
-
-```bash
-# Install PM2
-npm install -g pm2
-
-# Start application
-pm2 start src/app.js --name "car-listing-service"
-
-# Enable startup script
-pm2 startup
-pm2 save
-
-# Monitor
-pm2 monit
-
-# View logs
-pm2 logs car-listing-service
 ```
 
 ## 🔧 Troubleshooting
@@ -569,11 +542,7 @@ MIT
 
 ## 👨‍💻 Author
 
-Your Name
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read contributing guidelines before submitting PRs.
+Sahil Suman
 
 ## 📞 Support
 
