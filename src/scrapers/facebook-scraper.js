@@ -8,10 +8,11 @@ const CarListingModel = require('../models/car-listing');
  * Uses Puppeteer to scrape car listings from Facebook Marketplace
  * 
  * Challenges:
- * - Facebook uses dynamic content loading (React)
- * - Anti-bot detection mechanisms
- * - Rate limiting
- * - Changing DOM structure
+- **Authentication**: Must be logged in to view listings
+- **Anti-bot measures**: CAPTCHA, IP detection, rate limiting
+- **Proxy rotation**: Residential proxies ($50-200/month)
+- **Maintenance**: DOM structure changes frequently
+- **Legal considerations**: Violates Facebook ToS
  */
 
 class FacebookScraper {
