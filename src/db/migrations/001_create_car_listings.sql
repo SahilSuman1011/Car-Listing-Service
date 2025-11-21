@@ -1,4 +1,3 @@
--- Create car_listings table
 -- This table stores scraped car listing data from Facebook Marketplace
 
 CREATE TABLE IF NOT EXISTS car_listings (
